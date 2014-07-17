@@ -17,5 +17,13 @@
         <strong>There are no categories present</strong>
     {% endif %}
 
+    {% if top_viewed_pages %}
+        <ol>
+            {% for page in top_viewed_pages %}
+                <li>{{ page }}</li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+
 </body>
 </html>
