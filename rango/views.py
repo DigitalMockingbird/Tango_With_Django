@@ -9,6 +9,7 @@ from rango.models import Page
 
 from rango.forms import CategoryForm
 from rango.forms import PageForm
+from rango.forms import UserForm, UserProfileForm
 
 def decode_url(str):
     return str.replace(' ', '_')
@@ -119,4 +120,6 @@ def add_page(request, category_name_url):
              'category_name': category_name, 'form': form},
              context)
 
+def register(request):
+    context = RequestContext(request)
 
