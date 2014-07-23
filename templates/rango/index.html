@@ -31,12 +31,14 @@
 
     {% if user.is_authenticated %}
         <a href="/rango/restricted/">Restricted Page</a><br/>
+        <a href="/rango/add_category/">Add a new category</a><br/>
         <a href="/rango/logout/">Logout</a><br/>
     {% else %}
+        <p>Please login if you would like to add or edit any pages or categories</p>
         <a href="/rango/register/">Register Here</a><br/>
         <a href="/rango/login/">Login</a><br/>
     {% endif %}
+    <br/>
     <a href="/rango/about/">About</a><br/>
-    <a href="/rango/add_category/">Add a new category</a><br/>
 </body>
 </html>
