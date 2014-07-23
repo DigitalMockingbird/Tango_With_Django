@@ -54,8 +54,6 @@ def category(request, category_name_url):
 
     return render_to_response('rango/category.html', context_dict, context)
 
-from rango.forms import CategoryForm
-
 @login_required
 def add_category(request):
     # Get the context from the request.
@@ -228,7 +226,9 @@ def user_login(request):
 
 @login_required
 def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
+    context = RequestContext(request)
+    context_dict = {'restricted_message': "Since you're logged in, you can see this text!"}
+    return render_to_response('rango/restricted.html', context_dict, context)
 
 @login_required
 def user_logout(request):

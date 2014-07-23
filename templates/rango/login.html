@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Rango</title>
-</head>
-<body>
+{% extends 'rango/base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block body_block %}
     <h1>Login to Rango</h1>
 
     {% if bad_login_details %}
@@ -20,5 +17,4 @@
 
         <input type="submit" value="Submit" />
     </form>
-</body>
-</html>
+{% endblock %}
