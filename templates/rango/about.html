@@ -1,7 +1,11 @@
 {% extends 'rango/base.html' %}
+{% load static %}
 {% block title %}About{% endblock %}
 
 {% block body_block %}
-    <p>Rango says: Here is the about page.</p>
-    <p>You've visited this website {{ visits }} time(s).</p>
+    <div class="jumbotron">
+        <p>Rango says: Here is the about page.</p>
+        <p>You've visited this website {{ visits }} time(s).</p>
+        <img src="{% static 'imgs/rango.jpg' %}" alt="a picture of Rango" width="400"/>
+    </div>
 {% endblock %}
