@@ -1,21 +1,14 @@
-# from django.shortcuts import render
-# from django.http import HttpResponse
-
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import redirect
 
-from rango.models import Category
-from rango.models import Page
-
-from rango.forms import CategoryForm
-from rango.forms import PageForm
-from rango.forms import UserForm, UserProfileForm
-
+from rango.models import Category, Page, UserProfile
+from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from rango.bing_search import run_query
-
 from datetime import datetime
 
 def encode_url(str):
@@ -27,11 +20,22 @@ def decode_url(str):
 def remove_space(str):
     return str.replace(' ', '')
 
+def get_category_list(max_results=0, starts_with=''):
+    cat_list = Category.objects.all()
+
+    for cat in cat_list:
+        cat.url = encode_url(cat.name)
+
+    return cat_list
+
 def index(request):
     context = RequestContext(request)
 
     category_list = Category.objects.all()
     context_dict = {'categories': category_list}
+
+    cat_list = get_category_list()
+    context_dict['cat_list'] = cat_list
 
     for category in category_list:
         category.url = encode_url(category.name)
@@ -39,6 +43,7 @@ def index(request):
     page_list = Page.objects.order_by('-views')[:5]
     context_dict['pages'] = page_list
 
+    # cookie section
     if request.session.get('last_visit'):
         # The session has a value for the last visit
         last_visit_time = request.session.get('last_visit')
@@ -57,12 +62,18 @@ def index(request):
 
 def about(request):
     context = RequestContext(request)
+
     if request.session.get('visits'):
         count = request.session.get('visits')
     else:
         count = 0
 
-    return render_to_response('rango/about.html', {'visits':count}, context)
+    context_dict = {'visits': count}
+
+    cat_list = get_category_list()
+    context_dict['cat_list'] = cat_list
+
+    return render_to_response('rango/about.html', context_dict, context)
 
 def cake(request):
     context = RequestContext(request)
@@ -70,17 +81,43 @@ def cake(request):
     return render_to_response('rango/cake.html', context_dict, context)
 
 def category(request, category_name_url):
+    # Request our context
     context = RequestContext(request)
-    context_dict = {'category_name': category_name_url}
+
+    # Change underscores in the category name to spaces.
+    # URL's don't handle spaces well, so we encode them as underscores.
+    category_name = decode_url(category_name_url)
+
+    # Build up the dictionary we will use as out template context dictionary.
+    context_dict = {'category_name': category_name, 'category_name_url': category_name_url}
+
+    cat_list = get_category_list()
+    context_dict['cat_list'] = cat_list
 
     try:
-        category = Category.objects.get(name=category_name_url)
-        pages = Page.objects.filter(category=category)
-        context_dict['pages'] = pages
+        # Find the category with the given name.
+        # Raises an exception if the category doesn't exist.
+        # We also do a case insensitive match.
+        category = Category.objects.get(name__iexact=category_name)
         context_dict['category'] = category
+        # Retrieve all the associated pages.
+        # Note that filter returns >= 1 model instance.
+        pages = Page.objects.filter(category=category).order_by('-views')
+
+        # Adds our results list to the template context under name pages.
+        context_dict['pages'] = pages
     except Category.DoesNotExist:
+        # We get here if the category does not exist.
+        # Will trigger the template to display the 'no category' message.
         pass
 
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            result_list = run_query(query)
+            context_dict['result_list'] = result_list
+
+    # Go render the response and return it to the client.
     return render_to_response('rango/category.html', context_dict, context)
 
 @login_required
@@ -278,4 +315,46 @@ def search(request):
         if query:
             result_list = run_query(query)
 
-    return render_to_response('rango/search.html', {'result_list': result_list}, context)
+    context_dict = {'result_list': result_list}
+
+    cat_list = get_category_list()
+    context['cat_list'] = cat_list
+
+
+    return render_to_response('rango/search.html', context_dict, context)
+
+@login_required
+def profile(request):
+    context = RequestContext(request)
+
+    cat_list = get_category_list()
+    context_dict = {'cat_list': cat_list}
+
+    u = User.objects.get(username=request.user)
+
+    try:
+        up = UserProfile.objects.get(user=u)
+    except:
+        up = None
+
+    context_dict['user'] = u
+    context_dict['user_profile'] = up
+
+    return render_to_response('rango/profile.html', context_dict, context)
+
+def track_url(request):
+    context = RequestContext(request)
+    page_id = None
+    url = '/rango/'
+
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+            try:
+                page = Page.objects.get(id=page_id)
+                page.views = page.views + 1
+                page.save()
+                url = page.url
+            except:
+                pass
+    return redirect(url)

@@ -11,9 +11,9 @@
         {% csrf_token %}
 
         {% if bad_details %}
-        <p><strong>Your username and/or password were incorrect!</strong></p>
+            <p><strong>Your username and/or password were incorrect!</strong></p>
         {% elif disabled_account %}
-        <p><strong>Your Rango account is currently disabled; we can't log you in!</strong></p>
+            <p><strong>Your Rango account is currently disabled; we can't log you in!</strong></p>
         {% endif %}
 
         Username: <input type="text" class="input-block-level" placeholder="Username" name="username" value="" size="50" />
