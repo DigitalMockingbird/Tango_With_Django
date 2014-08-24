@@ -51,7 +51,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.environ.get('MEDIA_ROOT', local_path('media/'))
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', PROJECT_DIR('media/'))
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -62,7 +62,7 @@ MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.environ.get('STATIC_ROOT', local_path('static/'))
+STATIC_ROOT = os.environ.get('STATIC_ROOT', PROJECT_DIR('static/'))
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -79,7 +79,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '{{ secret_key }}'
+SECRET_KEY = '3hiud7guwjd%(csxtl*c*2l+ga0yhm+%$@mw5@kd+qsz=k4b$g'
 
 # List of callables that know how to import templates from various sources.
 if not DEBUG:
