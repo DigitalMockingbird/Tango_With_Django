@@ -17,6 +17,10 @@ ADMINS = (
     ('Noah', 'noah@digitalmockingbird.com')
 )
 
+# DATABASES = {
+#     'default': dj_database_url.config(default='sqlite:///db.sqlite')
+# }
+
 MANAGERS = ADMINS
 
 DATABASES['default'] =  dj_database_url.config()
