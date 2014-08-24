@@ -3,6 +3,7 @@ import os
 import dj_database_url
 
 boolean = lambda value: bool(int(value))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(__file__)
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates')
@@ -32,7 +33,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ALLOWED_HOSTS = ['*']
 
 # Static asset configuration
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # STATIC_ROOT = 'staticfiles'
 # STATIC_URL = '/static/'
 
