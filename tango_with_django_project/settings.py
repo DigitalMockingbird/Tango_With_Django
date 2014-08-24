@@ -8,9 +8,24 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
+DATABASES['default'] =  dj_database_url.config()
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+# changes for heroku
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = 'staticfiles'
+STATIC_URL = '/static/'
+
+# BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SETTINGS_DIR = os.path.dirname(__file__)
 
 PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
@@ -18,6 +33,25 @@ PROJECT_PATH = os.path.abspath(PROJECT_PATH)
 
 TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
 TEMPLATE_DIRS = (TEMPLATE_PATH,)
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.6/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
+
+# change from static_dirs to staticfiles_dirs (1.5 -> 1.6)
+# changed for heroku
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static')
+)
+
+# STATICFILES_DIRS = (
+#     STATIC_PATH,
+# )
+
+# media == uploads (DO NOT USE FOR PRODUCTION)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 
 LOGIN_URL = '/rango/login/'
 
@@ -84,18 +118,3 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
-STATIC_URL = '/static/'
-STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
-
-# change from static_dirs to staticfiles_dirs (1.5 -> 1.6)
-STATICFILES_DIRS = (
-    STATIC_PATH,
-)
-
-# media == uploads (DO NOT USE FOR PRODUCTION)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
