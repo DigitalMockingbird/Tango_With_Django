@@ -3,7 +3,10 @@ import os
 import dj_database_url
 
 boolean = lambda value: bool(int(value))
-local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
+PROJECT_DIR = os.path.dirname(__file__)
+TEMPLATE_DIRS = (
+    os.path.join(PROJECT_DIR, 'templates')
+)
 
 # DEBUG = boolean(os.environ.get('DEBUG', 0))
 DEBUG = True
@@ -105,10 +108,6 @@ ROOT_URLCONF = 'tango_with_django_project.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'tango_with_django_project.wsgi.application'
-
-TEMPLATE_DIRS = (
-    local_path('templates/')
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
