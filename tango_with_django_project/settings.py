@@ -5,8 +5,9 @@ import dj_database_url
 boolean = lambda value: bool(int(value))
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
-DEBUG = boolean(os.environ.get('DEBUG', 0))
-TEMPLATE_DEBUG = DEBUG
+# DEBUG = boolean(os.environ.get('DEBUG', 0))
+DEBUG = True
+TEMPLATE_DEBUG = True
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
