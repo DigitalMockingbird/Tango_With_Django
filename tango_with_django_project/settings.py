@@ -39,7 +39,7 @@ ALLOWED_HOSTS = ['*']
 # STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(local_path, 'static'),
+    os.path.join(local_path, 'static/'),
 )
 
 # Local time zone for this installation. Choices can be found here:
