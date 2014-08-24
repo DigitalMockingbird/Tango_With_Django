@@ -3,6 +3,7 @@ import os
 import dj_database_url
 
 boolean = lambda value: bool(int(value))
+local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(__file__)
 TEMPLATE_DIRS = (
@@ -69,7 +70,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.environ.get('MEDIA_ROOT', BASE_DIR('media/'))
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', local_path('media/'))
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
